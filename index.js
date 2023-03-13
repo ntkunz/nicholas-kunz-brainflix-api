@@ -1,5 +1,8 @@
 const express = require("express");
 const app = express();
+const videosRoutes=require("./routes/videos");
+const fs = require("fs");
+// const axios = require("axios");
 // const commentRoutes=require("./routes/comments")
 //above might be different, lifted from demo
 
@@ -13,7 +16,7 @@ app.use((req, res, next) => {
     next();
 })
 
-app.use('/videos', videoRutes);
+app.use('/videos', videosRoutes);
 
 app.listen(5000, () => {
     console.log('app running on port 5000');
