@@ -11,7 +11,7 @@ app.use(express.json());
 
 app.use((req, res, next) => {
     console.log("requested");
-    console.log(req.method);
+    // console.log(req.method);
 
     next();
 })
