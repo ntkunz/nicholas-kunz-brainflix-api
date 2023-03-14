@@ -14,8 +14,6 @@ router.get("/", (req, res) => {
     // console.log(res);
 });
 
-
-
 //last friday (3/10) mark gave demo on using .json files to 
 //read and write and append json files... check there for more info
 fs.readFile("./data/videos.json", (err, data) => {
@@ -24,8 +22,5 @@ fs.readFile("./data/videos.json", (err, data) => {
     console.log(videosArray);
     }
 });
-
-
-
 
 module.exports = router;
