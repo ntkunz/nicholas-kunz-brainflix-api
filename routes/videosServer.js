@@ -11,14 +11,14 @@ const fs = require("fs");
 
 //IF i MAKE IT INTO A FUNCTION LIKE BELOW.... IT DOESN'T WORK ON POSTMAN!!!
 function getVideos() {
-    router.get("/", (req, res) => {
-        fs.readFile("./data/videos.json", (err, data) => {
-        if (err) {
-                return res.send(err);
-            }
-            res.json(JSON.parse(data));
-        });
-    });
+    const videosFile = fs.readFile("./data/videos.json");
+    const videosData = JSON.parse(videosFile);
+    return videosData;
+}
+
+function writeVideos(data) {
+    const stringifiedVideo = JSON.stringify(data);
+    fs.writeFile("./data/videos.json", stringifiedVideo);
 }
 
 
