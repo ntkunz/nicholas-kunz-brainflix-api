@@ -4,22 +4,14 @@ const { v4: uuidv4 } = require("uuid");
 const fs = require("fs");
 // import { readFile } from fs;
 
-function readFile(file, callback) {
-    fs.readFile(file, 'utf-8', callback);
-}
+//THIS REQAD FILE FUNCTION DOESN'T WORK FOR ME 
+// function readFile(file, callback) {
+//     fs.readFile(file, 'utf-8', callback);
+// }
 
 //IF i MAKE IT INTO A FUNCTION LIKE BELOW.... IT DOESN'T WORK ON POSTMAN!!!
-// function getVideos() {
-//     router.get("/", (req, res) => {
-//         fs.readFile("./data/videos.json", (err, data) => {
-//         if (err) {
-//                 return res.send(err);
-//             }
-//             res.json(JSON.parse(data));
-//         });
-//     });
-
-router.get("/", (req, res) => {
+function getVideos() {
+    router.get("/", (req, res) => {
         fs.readFile("./data/videos.json", (err, data) => {
         if (err) {
                 return res.send(err);
@@ -27,12 +19,36 @@ router.get("/", (req, res) => {
             res.json(JSON.parse(data));
         });
     });
+}
 
-    // const videosFile = fs.readFile("/data/videos.json");
-    // console.log('getVideos() Ran');
-    // const videosData = JSON.parse(videosFile);
-    // return videosData;
-// }
+
+
+router.get("/", (req, res) => {
+        fs.readFile("./data/videos.json", (err, data) => {
+        if (err) {
+                return res.send(err);
+            }
+            //map this information when you have time to only return needed information (id, title, image, channel)
+            res.json(JSON.parse(data));
+        });
+    });
+
+router.get("/:id", (req, res) => {
+    fs.readFile("./data/videos.json", (err, data) => {
+        if (!err) {
+            const videosArray = JSON.parse(data);
+            // console.log(videosArray);
+            
+            const oneVideo = videosArray.find((video) => video.id === req.params.id);
+                console.log(oneVideo);
+            
+            res.status(200).json(oneVideo);
+        } else {
+            res.status(500).send(err)
+        }
+    });
+});
+
 
 function writeVideos(data) {
     const stringifiedData = JSON.stringify(data);
@@ -85,29 +101,6 @@ router.get("/", (req, res) => {
 // });
 // });
 
-
-/*  ====== Trying to get the entire array returned and having no luck
-router.get("/", (req, res) => {
-    const videosData = getVideos();
-    console.log(videosData)
-    res.status(200).send(videosData)
-})
-*/
-//====================================this down to module.exports not working... dynamic return
-// router.get("/:id", (req, res) => {
-//     fs.readFile("./data/videos/json", (err, data) => {
-//         if (!err) {
-//             const videosArray = JSON.parse(data);
-//             const video = videosArray.find(video =>  video.id === req.params.id)
-//             console.log("goof", video)
-
-
-
-//             res.status(200).json(video);
-//         }
-//             // const video = videosArray.find(video =>  video.id === mainVideo.id).map((video) => (
-//         }
-// )})
 
 module.exports = router;
 
