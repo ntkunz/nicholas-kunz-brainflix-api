@@ -30,7 +30,9 @@ router.get("/", (req, res) => {
                 return res.send(err);
             }
             //map this information when you have time to only return needed information (id, title, image, channel)
-            res.json(JSON.parse(data));
+            const parsedData = JSON.parse(data);
+            // res.status(200).json(parsedData);
+            res.status(200).json(parsedData);
         });
     });
 
@@ -55,7 +57,9 @@ router.post("/", (req, res) => {
     fs.readFile("./data/videos.json", (err, data) => {
         if (!err) {
             // if key and property are same name, don't need to have key and value
-            const parsedData = JSON.parse(data);
+            let parsedData = JSON.parse(data);
+            console.log(parsedData);
+            console.log('data: ', data)
             const newVideo = {
                     id: v4(),
                     title: req.body.title,
@@ -69,16 +73,17 @@ router.post("/", (req, res) => {
                     timestamp: Date.now(),
                     comments: []
                 };
-            parsedData.push(newVideo);
+            // parsedData.push(newVideo);
+            // data.push(newVideo);
+            //========THIS TURNS THE DATA INTO BUFFER FORMAT!!!!!!!!!!!!============
             const newVideoStringified = JSON.stringify(data);
             fs.writeFile("./data/videos.json", newVideoStringified, (err) => {
-
                 if (err){
-                     res.status(403).send(err); 
+                    res.status(403).send(err); 
                 }
             });
             res.status(201).send('howdy');
-            } 
+        } 
     })
 })
 
