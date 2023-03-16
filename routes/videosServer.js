@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { v4: uuidv4 } = require("uuid");
+const { v4 } = require("uuid");
 const fs = require("fs");
 // import { readFile } from fs;
 
@@ -10,16 +10,17 @@ const fs = require("fs");
 // }
 
 //IF i MAKE IT INTO A FUNCTION LIKE BELOW.... IT DOESN'T WORK ON POSTMAN!!!
-function getVideos() {
-    const videosFile = fs.readFile("./data/videos.json");
-    const videosData = JSON.parse(videosFile);
-    return videosData;
-}
+// function getVideos() {
+//     const videosFile = fs.readFile("./data/videos.json");
+//     const videosData = JSON.parse(videosFile);
+//     return videosData;
+// }
 
-function writeVideos(data) {
-    const stringifiedVideo = JSON.stringify(data);
-    fs.writeFile("./data/videos.json", stringifiedVideo);
-}
+// function writeVideos(data) {
+//     const stringifiedVideo = JSON.stringify(data);
+//     fs.writeFile("./data/videos.json", stringifiedVideo);
+// }
+
 
 
 
@@ -44,17 +45,42 @@ router.get("/:id", (req, res) => {
             
             res.status(200).json(oneVideo);
         } else {
+            //CHANGE STATUS CODE TO BE CORRECT
             res.status(500).send(err)
         }
     });
 });
 
+router.post("/", (req, res) => {
+    fs.readFile("./data/videos.json", (err, data) => {
+        if (!err) {
+            // if key and property are same name, don't need to have key and value
+            const parsedData = JSON.parse(data);
+            const newVideo = {
+                    id: v4(),
+                    title: req.body.title,
+                    channel: "You",
+                    image: `http://localhost:5000/images/image6.jpeg`,
+                    description: req.body.description,
+                    views: 0,
+                    likes: 0,
+                    duration: `4:15`,
+                    video: `https://project-2-api.herokuapp.com/stream`,
+                    timestamp: Date.now(),
+                    comments: []
+                };
+            parsedData.push(newVideo);
+            const newVideoStringified = JSON.stringify(data);
+            fs.writeFile("./data/videos.json", newVideoStringified, (err) => {
 
-function writeVideos(data) {
-    const stringifiedData = JSON.stringify(data);
-    // fs.writeFileSync("./data/videos.json", stringifiedData);
-    readFile("/data/videos.json", stringifiedData);
-}  
+                if (err){
+                     res.status(403).send(err); 
+                }
+            });
+            res.status(201).send('howdy');
+            } 
+    })
+})
 
 
 //last friday (3/10) mark gave demo on using .json files to 
