@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const { v4 } = require("uuid");
 const fs = require("fs");
-// import { readFile } from fs;
 
 //THIS REQAD FILE FUNCTION DOESN'T WORK FOR ME 
 // function readFile(file, callback) {
