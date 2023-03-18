@@ -22,28 +22,26 @@ const fs = require("fs");
 // }
 
 
-
-
 router.get("/", (req, res) => {
-        fs.readFile("./data/videos.json", (err, data) => {
+        fs.readFile("./data/videos.json", 'utf-8', (err, data) => {
         if (err) {
                 return res.send(err);
             }
             //map this information when you have time to only return needed information (id, title, image, channel)
             const parsedData = JSON.parse(data);
-            // res.status(200).json(parsedData);
+            // res.status(200).json(data);
             res.status(200).json(parsedData);
         });
     });
 
 router.get("/:id", (req, res) => {
-    fs.readFile("./data/videos.json", (err, data) => {
+    fs.readFile("./data/videos.json", 'utf-8', (err, data) => {
         if (!err) {
             const videosArray = JSON.parse(data);
             // console.log(videosArray);
             
             const oneVideo = videosArray.find((video) => video.id === req.params.id);
-                console.log(oneVideo);
+                // console.log(oneVideo);
             
             res.status(200).json(oneVideo);
         } else {
@@ -53,13 +51,41 @@ router.get("/:id", (req, res) => {
     });
 });
 
+router.post("/:id/comments", (req, res) => {
+    fs.readFile("./data/videos.json", 'utf-8', (err, data) => {
+    if (!err) {
+        const videosArray = JSON.parse(data);
+        const oneVideo = videosArray.find((video) => video.id === req.params.id);
+        
+        const newComment = {
+            "id": v4(), 
+            "name": "Me", 
+            "comment": req.body.comment, 
+            "likes": 0, 
+            "timestamp": Date.now()
+        };
+
+        oneVideo.comments.push(newComment);
+        const parsedArray = JSON.stringify(videosArray)
+        fs.writeFile("./data/videos.json", parsedArray, 'utf-8' , (err, data) => {
+            if (err){
+                res.status(403).send(err); 
+            } 
+            res.status(201).send(data)
+        });
+        res.status(200).json(oneVideo);
+    } else {
+        //CHANGE STATUS CODE TO BE CORRECT
+        res.status(500).send(err)
+    }
+});
+});
+
 router.post("/", (req, res) => {
-    fs.readFile("./data/videos.json", (err, data) => {
+    fs.readFile("./data/videos.json", 'utf-8', (err, data) => {
         if (!err) {
             // if key and property are same name, don't need to have key and value
-            let parsedData = JSON.parse(data);
-            console.log(parsedData);
-            console.log('data: ', data)
+            let parsedData = JSON.parse(data)
             const newVideo = {
                     id: v4(),
                     title: req.body.title,
@@ -73,77 +99,18 @@ router.post("/", (req, res) => {
                     timestamp: Date.now(),
                     comments: []
                 };
-            // parsedData.push(newVideo);
-            // data.push(newVideo);
-            //========THIS TURNS THE DATA INTO BUFFER FORMAT!!!!!!!!!!!!============
-            const newVideoStringified = JSON.stringify(data);
-            fs.writeFile("./data/videos.json", newVideoStringified, (err) => {
+
+                parsedData.push(newVideo)
+            const newVideoStringified = JSON.stringify(parsedData)
+            fs.writeFile("./data/videos.json", newVideoStringified, 'utf-8' , (err, data) => {
                 if (err){
                     res.status(403).send(err); 
-                }
+                } 
+                res.status(201).send(data)
             });
-            res.status(201).send('howdy');
+            res.status(201).send(data);
         } 
     })
 })
 
-
-//last friday (3/10) mark gave demo on using .json files to 
-//read and write and append json files... check there for more info
-//ALSO  demo 3/14 - week 8 tuesday
-
-/* WEDNESDAY MORNING COMMENT OUT
-router.get("/", (req, res) => {
-
-    const videosData = getVideos();
-    // const videosSimple = videosData.map((video) => {
-    //     return {
-    //         id: video.id,
-    //         title: video.title,
-    //         image: video.image,
-    //         channel: video.channel
-    //     }
-    // })
-    // res.status(200).json(videosSimple);
-    res.status(200).json(videosData);
-    });
-*/
-
-
-
-//all of this below replaced by lines 50-57 above
-//THIS WORKS
-// router.get("/", (req, res) => {
-// fs.readFile("./data/videos.json", (err, data) => {
-//     if (!err) {
-//     const videosArray = JSON.parse(data);
-//     console.log(videosArray);
-//     const videosSimple = videosArray.map((video) => {
-//         return {
-//             id: video.id,
-//             title: video.title,
-//             image: video.image,
-//             channel: video.channel
-//         }
-//     })
-//     // res.status(200).json(videosSimple);
-//     res.status(200).json(videosArray);
-//     }
-// });
-// });
-
-
 module.exports = router;
-
-//things that work
-//this gets the entire array parsed
-/*
-router.get("/", (req, res) => {
-    fs.readFile("./data/videos.json", (err, data) => {
-    if (err) {
-            return res.send(err);
-        }
-        res.json(JSON.parse(data));
-    });
-});
-*/
