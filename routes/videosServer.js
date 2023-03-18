@@ -80,6 +80,30 @@ router.post("/:id/comments", (req, res) => {
 });
 });
 
+router.delete("/:id/comments/:commentid", (req, res) => {
+    fs.readFile("./data/videos.json", 'utf-8', (err, data) => {
+    if (!err) {
+        const videosArray = JSON.parse(data);
+        const oneVideo = videosArray.find((video) => video.id === req.params.id);
+        const commentIndex = oneVideo.comments.findIndex((comment) => comment.id === req.params.commentid);
+        oneVideo.comments.splice(commentIndex, 1)
+        console.log(oneVideo)
+        const parsedArray = JSON.stringify(videosArray)
+        fs.writeFile("./data/videos.json", parsedArray, 'utf-8' , (err, data) => {
+            if (err){
+                res.status(403).send(err); 
+            } 
+            res.status(201).send(data)
+        }
+        );
+        res.status(200).json(videosArray);
+    } else {
+        //CHANGE STATUS CODE TO BE CORRECT
+        res.status(500).send(err)
+    }
+});
+});
+
 router.post("/", (req, res) => {
     fs.readFile("./data/videos.json", 'utf-8', (err, data) => {
         if (!err) {
