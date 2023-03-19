@@ -96,7 +96,7 @@ router.delete("/:id/comments/:commentid", (req, res) => {
             res.status(201).send(data)
         }
         );
-        res.status(200).json(videosArray);
+        res.status(200).json(data);
     } else {
         //CHANGE STATUS CODE TO BE CORRECT
         res.status(500).send(err)
