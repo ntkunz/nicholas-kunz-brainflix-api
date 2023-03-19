@@ -93,7 +93,7 @@ router.delete("/:id/comments/:commentid", (req, res) => {
             if (err){
                 res.status(403).send(err); 
             } 
-            res.status(201).send(data)
+            res.status(201).json(data)
         }
         );
         res.status(200).json(data);
