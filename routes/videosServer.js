@@ -44,7 +44,6 @@ router.get("/:id", (req, res) => {
             const oneVideo = videosArray.find((video) => video.id === req.params.id);
             res.status(200).json(oneVideo);
         } else {
-            //CHANGE STATUS CODE TO BE CORRECT=============================
             res.status(400).send(err)
         }
     });
@@ -66,7 +65,7 @@ router.post("/:id/comments", (req, res) => {
 
         oneVideo.comments.push(newComment);
         const parsedArray = JSON.stringify(videosArray)
-        fs.writeFile("./data/videos.json", parsedArray, 'utf-8' , (err, data) => {
+        fs.writeFile("./data/videos.json", parsedArray, (err, data) => {
             if (err){
                 res.status(400).send(err); 
             } 
@@ -89,7 +88,7 @@ router.delete("/:id/comments/:commentid", (req, res) => {
         oneVideo.comments.splice(commentIndex, 1)
         console.log(oneVideo)
         const parsedArray = JSON.stringify(videosArray)
-        fs.writeFile("./data/videos.json", parsedArray, 'utf-8' , (err, data) => {
+        fs.writeFile("./data/videos.json", parsedArray, (err, data) => {
             if (err){
                 res.status(400).send(err); 
             } 
@@ -125,7 +124,7 @@ router.post("/", (req, res) => {
 
                 parsedData.push(newVideo)
             const newVideoStringified = JSON.stringify(parsedData)
-            fs.writeFile("./data/videos.json", newVideoStringified, 'utf-8' , (err, data) => {
+            fs.writeFile("./data/videos.json", newVideoStringified, (err, data) => {
                 if (err){
                     res.status(400).send(err); 
                 } 
