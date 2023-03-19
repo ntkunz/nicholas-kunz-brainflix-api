@@ -24,7 +24,7 @@ const fs = require("fs");
 router.get("/", (req, res) => {
         fs.readFile("./data/videos.json", 'utf-8', (err, data) => {
         if (err) {
-            return res.send(err);
+            return res.status(400).send(err);
         }
         const parsedData = JSON.parse(data)
         const videos = parsedData.map((video) => ({
@@ -45,7 +45,7 @@ router.get("/:id", (req, res) => {
             res.status(200).json(oneVideo);
         } else {
             //CHANGE STATUS CODE TO BE CORRECT=============================
-            res.status(500).send(err)
+            res.status(400).send(err)
         }
     });
 });
@@ -68,14 +68,14 @@ router.post("/:id/comments", (req, res) => {
         const parsedArray = JSON.stringify(videosArray)
         fs.writeFile("./data/videos.json", parsedArray, 'utf-8' , (err, data) => {
             if (err){
-                res.status(403).send(err); 
+                res.status(400).send(err); 
             } 
             res.status(201).send(data)
         });
         res.status(200).json(oneVideo);
     } else {
         //CHANGE STATUS CODE TO BE CORRECT
-        res.status(500).send(err)
+        res.status(400).send(err)
     }
 });
 });
@@ -91,15 +91,15 @@ router.delete("/:id/comments/:commentid", (req, res) => {
         const parsedArray = JSON.stringify(videosArray)
         fs.writeFile("./data/videos.json", parsedArray, 'utf-8' , (err, data) => {
             if (err){
-                res.status(403).send(err); 
+                res.status(400).send(err); 
             } 
-            res.status(201).json(data)
+            res.status(200).json(data)
         }
         );
         res.status(200).json(data);
     } else {
         //CHANGE STATUS CODE TO BE CORRECT
-        res.status(500).send(err)
+        res.status(400).send(err)
     }
 });
 });
@@ -113,7 +113,7 @@ router.post("/", (req, res) => {
                     id: v4(),
                     title: req.body.title,
                     channel: "You",
-                    image: `http://localhost:5000/images/image6.jpeg`,
+                    image: `http://localhost:5000/images/bmx-jump.jpg`,
                     description: req.body.description,
                     views: 0,
                     likes: 0,
@@ -127,7 +127,7 @@ router.post("/", (req, res) => {
             const newVideoStringified = JSON.stringify(parsedData)
             fs.writeFile("./data/videos.json", newVideoStringified, 'utf-8' , (err, data) => {
                 if (err){
-                    res.status(403).send(err); 
+                    res.status(400).send(err); 
                 } 
                 res.status(201).send(data)
             });
