@@ -1,9 +1,6 @@
 const express = require("express");
 const app = express();
 const videosRoutes=require("./routes/videosServer");
-const fs = require("fs");
-const axios = require("axios");
-const { v4 } = require('uuid');
 const cors = require("cors");
 const PORT = 5000;
 

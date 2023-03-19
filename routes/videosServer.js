@@ -24,12 +24,16 @@ const fs = require("fs");
 router.get("/", (req, res) => {
         fs.readFile("./data/videos.json", 'utf-8', (err, data) => {
         if (err) {
-                return res.send(err);
-            }
-            //map this information when you have time to only return needed information (id, title, image, channel)
-            const parsedData = JSON.parse(data);
-            // res.status(200).json(data);
-            res.status(200).json(parsedData);
+            return res.send(err);
+        }
+        const parsedData = JSON.parse(data)
+        const videos = parsedData.map((video) => ({
+            id: video.id,
+            title: video.title,
+            channel: video.channel,
+            image: video.image,
+        }))
+        res.status(200).json(videos);
         });
     });
 
@@ -37,14 +41,10 @@ router.get("/:id", (req, res) => {
     fs.readFile("./data/videos.json", 'utf-8', (err, data) => {
         if (!err) {
             const videosArray = JSON.parse(data);
-            // console.log(videosArray);
-            
             const oneVideo = videosArray.find((video) => video.id === req.params.id);
-                // console.log(oneVideo);
-            
             res.status(200).json(oneVideo);
         } else {
-            //CHANGE STATUS CODE TO BE CORRECT
+            //CHANGE STATUS CODE TO BE CORRECT=============================
             res.status(500).send(err)
         }
     });
