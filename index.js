@@ -2,10 +2,12 @@ const express = require("express");
 const app = express();
 const videosRoutes=require("./routes/videosServer");
 const cors = require("cors");
-const PORT = 5000;
+require('dotenv').config();
+const PORT = process.env.PORT || 5000;
+const { CORS_ORIGIN } = process.env;
 
 //middleware
-app.use(cors());
+app.use(cors({ origin: CORS_ORIGIN }));
 app.use(express.static('public'));
 app.use(express.json());
 app.use((req, res, next) => {
