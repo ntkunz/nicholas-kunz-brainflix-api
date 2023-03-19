@@ -24,11 +24,10 @@ const fs = require("fs");
 router.get("/", (req, res) => {
         fs.readFile("./data/videos.json", 'utf-8', (err, data) => {
         if (err) {
-                return res.send(err);
+                return res.send("err : ", err);
             }
             //map this information when you have time to only return needed information (id, title, image, channel)
             const parsedData = JSON.parse(data);
-            // res.status(200).json(data);
             res.status(200).json(parsedData);
         });
     });
@@ -37,10 +36,8 @@ router.get("/:id", (req, res) => {
     fs.readFile("./data/videos.json", 'utf-8', (err, data) => {
         if (!err) {
             const videosArray = JSON.parse(data);
-            // console.log(videosArray);
             
             const oneVideo = videosArray.find((video) => video.id === req.params.id);
-                // console.log(oneVideo);
             
             res.status(200).json(oneVideo);
         } else {
@@ -87,7 +84,7 @@ router.delete("/:id/comments/:commentid", (req, res) => {
         const oneVideo = videosArray.find((video) => video.id === req.params.id);
         const commentIndex = oneVideo.comments.findIndex((comment) => comment.id === req.params.commentid);
         oneVideo.comments.splice(commentIndex, 1)
-        console.log(oneVideo)
+        // console.log(oneVideo)
         const parsedArray = JSON.stringify(videosArray)
         fs.writeFile("./data/videos.json", parsedArray, 'utf-8' , (err, data) => {
             if (err){
