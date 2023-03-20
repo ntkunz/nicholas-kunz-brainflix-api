@@ -2,15 +2,20 @@
   "name": "nicholas_kunz_brainflix_api",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^1.3.4",
     "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "fs": "^0.0.1-security",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
