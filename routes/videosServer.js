@@ -3,24 +3,6 @@ const router = express.Router();
 const { v4 } = require("uuid");
 const fs = require("fs");
 
-//THIS REQAD FILE FUNCTION DOESN'T WORK FOR ME 
-// function readFile(file, callback) {
-//     fs.readFile(file, 'utf-8', callback);
-// }
-
-//IF i MAKE IT INTO A FUNCTION LIKE BELOW.... IT DOESN'T WORK ON POSTMAN!!!
-// function getVideos() {
-//     const videosFile = fs.readFile("./data/videos.json");
-//     const videosData = JSON.parse(videosFile);
-//     return videosData;
-// }
-
-// function writeVideos(data) {
-//     const stringifiedVideo = JSON.stringify(data);
-//     fs.writeFile("./data/videos.json", stringifiedVideo);
-// }
-
-
 router.get("/", (req, res) => {
         fs.readFile("./data/videos.json", 'utf-8', (err, data) => {
         if (err) {
